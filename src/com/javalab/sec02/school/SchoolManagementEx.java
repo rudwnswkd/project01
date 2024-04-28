@@ -228,9 +228,37 @@ public class SchoolManagementEx {
                     System.out.println("잘못된 입력입니다. 다시 선택해주세요");
             }
         }
-    } // end of main
+    }
 
-    // 학과 메서드
+    private static void gradesMenu () { // 성적 관리 메뉴
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("=============================");
+            System.out.println("1. 성적 등록");
+            System.out.println("2. 성적 조회");
+            System.out.println("3. 메인 메뉴로 가기");
+            System.out.println("=============================");
+            System.out.print("메뉴 선택 : ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // 버퍼 비우기
+
+            switch (choice) {
+                case 1:
+
+                    registerGrade(scanner);
+                    break;
+                case 2:
+                    displayGradesByStudentId(scanner);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
+            }
+        }
+    }
+
+    // 학과 목록 메서드
     private static void displayDepartment() {
         System.out.println("학과 목록");
         for (Department d : repo.getDepartments()) {
@@ -238,6 +266,7 @@ public class SchoolManagementEx {
         }
     }
 
+    // 학과별 교수 메소드
     private static void displayProfessorsByDepartment() {
         Scanner scanner = new Scanner(System.in);
         boolean validDepartmentId = false;
@@ -247,9 +276,10 @@ public class SchoolManagementEx {
         departmentMap.put(3, 925);
 
         while (true) {
+            System.out.println();
             System.out.print("학과 번호를 입력하세요 : \n");
             System.out.println("===============");
-            System.out.println("1. 컴퓨터 공학과\n2. 산업공학과\n3. 전자공학과\n4. 메인으로 돌아가기");
+            System.out.println("1. 컴퓨터 공학과\n2. 산업공학과\n3. 전자공학과\n4. 뒤로돌아가기");
             System.out.println("===============");
             int departmentNumber = scanner.nextInt();
 
@@ -277,6 +307,7 @@ public class SchoolManagementEx {
         }
     }
 
+    // 학과별 학생 메소드
     private static void displayStudentsByDepartment() {
         Scanner scanner = new Scanner(System.in);
         boolean validDepartmentId = false;
@@ -286,9 +317,10 @@ public class SchoolManagementEx {
         departmentMap.put(3, 925);
 
         while (true) {
+            System.out.println();
             System.out.print("학과 번호를 입력하세요 : \n");
             System.out.println("===============");
-            System.out.println("1. 컴퓨터 공학과\n2. 산업공학과\n3. 전자공학과\n4. 메인으로 돌아가기");
+            System.out.println("1. 컴퓨터 공학과\n2. 산업공학과\n3. 전자공학과\n4. 뒤로돌아가기");
             System.out.println("===============");
             int departmentNumber = scanner.nextInt();
 
@@ -301,15 +333,14 @@ public class SchoolManagementEx {
                 boolean found = false;
                 for (Student s : repo.getStudents()) {
                     if (s.getDepartmentId() == departmentId) {
-                        System.out.println(s.getId() + " " + s.getName());
+                        System.out.println(s.getId() + " " + s.getDepartment() + " " + s.getName() + " " + s.getAddress());
                         found = true;
                     }
                 }
                 if (found) {
                     validDepartmentId = true;
-                    break; // 결과를 찾았으므로 반복문 종료
                 } else {
-                    System.out.println("해당 학과에 속한 학생을 찾을 수 없습니다. 다시 입력해주세요.");
+                    System.out.println("해당 학과에 속한 학생을 찾을 수 없습니다.");
                 }
             } else {
                 System.out.println("올바른 학과 번호를 입력해주세요.");
@@ -318,25 +349,43 @@ public class SchoolManagementEx {
     }
 
 
-
+    // 학과 정보 메소드
     private static void displayDepartmentInfo() {
         Scanner scanner = new Scanner(System.in);
         boolean validDepartmentId = false;
+        Map<Integer, Integer> departmentMap = new HashMap<>();
+        departmentMap.put(1, 920); // 예시: 1번은 학과 ID 920번을 나타냄
+        departmentMap.put(2, 923);
+        departmentMap.put(3, 925);
 
-        while (!validDepartmentId) {
-            System.out.print("학과 ID를 입력하세요: ");
-            int departmentId = scanner.nextInt();
+        while (true) {
+            System.out.println();
+            System.out.print("학과 번호를 입력하세요 : \n");
+            System.out.println("===============");
+            System.out.println("1. 컴퓨터 공학과\n2. 산업공학과\n3. 전자공학과\n4. 뒤로돌아가기");
+            System.out.println("===============");
+            int departmentNumber = scanner.nextInt();
 
-            for (Department department : repo.getDepartments()) {
-                if (department.getId() == departmentId) {
-                    System.out.println("학과 이름: " + department.getName());
-                    System.out.println("사무실 위치: " + department.getOffice());
-                    validDepartmentId = true;
-                }
+            if (departmentNumber == 4) {
+                break; // 4를 입력하면 반복문 종료하여 메인으로 돌아감
             }
 
-            if (!validDepartmentId) {
-                System.out.println("해당 학과를 찾을 수 없습니다. 다시 입력해주세요.");
+            if (departmentMap.containsKey(departmentNumber)) {
+                int departmentId = departmentMap.get(departmentNumber);
+                boolean found = false;
+                for (Department d : repo.getDepartments()) {
+                    if (d.getId() == departmentId) {
+                        System.out.println(d.getName() + " " + d.getOffice());
+                        found = true;
+                    }
+                }
+                if (found) {
+                    validDepartmentId = true;
+                } else {
+                    System.out.println("해당 학과를 찾을 수 없습니다.");
+                }
+            } else {
+                System.out.println("올바른 학과 번호를 입력해주세요.");
             }
         }
     }
@@ -489,34 +538,6 @@ public class SchoolManagementEx {
                     System.out.println("잘못된 직급을 선택했습니다.");
             }
         } // end of ListofProfessorsByRank
-
-    private static void gradesMenu () {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("=============================");
-            System.out.println("1. 성적 등록");
-            System.out.println("2. 성적 조회");
-            System.out.println("3. 메인 메뉴로 가기");
-            System.out.println("=============================");
-            System.out.print("메뉴 선택 : ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // 버퍼 비우기
-
-            switch (choice) {
-                case 1:
-
-                    registerGrade(scanner);
-                    break;
-                case 2:
-                    displayGradesByStudentId(scanner);
-                    break;
-                case 3:
-                    return;
-                default:
-                    System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
-            }
-        }
-    }
 
     // 성적 등록
     private static void registerGrade (Scanner scanner){
