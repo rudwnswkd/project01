@@ -153,7 +153,7 @@ public class SchoolManagementEx {
         System.out.println("해당 ID의 학생을 찾을 수 없습니다.");
     }
 
-    private static void  departmentMenu() {
+    private static void  departmentMenu() { // 학과 메뉴 메소드
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("=============================");
@@ -181,76 +181,6 @@ public class SchoolManagementEx {
                     displayDepartmentInfo();
                     break;
                 case 5:
-                    return;
-                default:
-                    System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
-            }
-        }
-    }
-
-    private static void professorMenu() { // 교수 관리 메뉴
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("==================");
-            System.out.println("1. 교수 등록");
-            System.out.println("2. 교수 조회");
-            System.out.println("3. 교수 정보 수정");
-            System.out.println("4. 교수 정보 삭제");
-            System.out.println("5. 학과별 교수 목록");
-            System.out.println("6. 직급별 교수 목록");
-            System.out.println("7. 메인 메뉴로 가기");
-            System.out.println("메뉴 선택");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // 버퍼 지우기
-
-            switch (choice) {
-                case 1:
-                    professorRegistration(scanner); // 교수 등록
-                    break;
-                case 2:
-                    professorCheck(); // 교수 조회
-                    break;
-                case 3:
-                    professorModify(scanner); // 교수 정보 수정
-                    break;
-                case 4:
-                    professorDelete(scanner); // 교수 정보 삭제
-                    break;
-                case 5:
-                    ProfessorListByDepartment(scanner); // 학과별 교수 목록
-                    break;
-                case 6:
-                    ListofProfessorsByRank(scanner); // 직급별 교수 목록
-                    break;
-                case 7:
-                    return; // 메뉴로 돌아가기
-                default:
-                    System.out.println("잘못된 입력입니다. 다시 선택해주세요");
-            }
-        }
-    }
-
-    private static void gradesMenu () { // 성적 관리 메뉴
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("=============================");
-            System.out.println("1. 성적 등록");
-            System.out.println("2. 성적 조회");
-            System.out.println("3. 메인 메뉴로 가기");
-            System.out.println("=============================");
-            System.out.print("메뉴 선택 : ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // 버퍼 비우기
-
-            switch (choice) {
-                case 1:
-
-                    registerGrade(scanner);
-                    break;
-                case 2:
-                    displayGradesByStudentId(scanner);
-                    break;
-                case 3:
                     return;
                 default:
                     System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
@@ -390,154 +320,225 @@ public class SchoolManagementEx {
         }
     }
 
-        private  static void professorRegistration(Scanner scanner) {
-            System.out.print("교수ID: ");
-            String id = scanner.nextLine();
-            System.out.print("주민번호: ");
-            String jumin = scanner.nextLine();
-            System.out.print("이름: ");
-            String name = scanner.nextLine();
-            System.out.print("학과코드: ");
-            int department = scanner.nextInt();
-            scanner.nextLine();
-            System.out.print("직급: ");
-            String rank = scanner.nextLine();
-            System.out.print("고용시기: ");
-            String hiredate = scanner.nextLine();
-
-            Professor professor = new Professor(id, jumin, name, department, rank,hiredate);
-            repo.getProfessors().add(professor);
-            System.out.println("새로운 교수가 등록되었습니다.");
-        } // end of professorRegistration
-
-        private static void professorCheck() {
-            System.out.println("등록된 교수 목록");
-            for(Professor p : repo.getProfessors()){
-                System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
-                        + " " + p.getGrade() + " " + p.getHireDate());
-            }
-        } //end of professorCheck
-
-        private  static void professorModify(Scanner scanner) {
-            System.out.println("수정할 교수의 ID를 입력하세요");
-            String id = scanner.nextLine();
-            for(Professor p : repo.getProfessors()){
-                if(p.getId().equals(id)){
-                    System.out.print("새 주민번호: ");
-                    String jumin = scanner.nextLine();
-                    System.out.print("새 이름: ");
-                    String name = scanner.nextLine();
-                    System.out.print("새 학과코드: ");
-                    int depertment = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("새 직급: ");
-                    String rank = scanner.nextLine();
-                    System.out.print("새 고용시기: ");
-                    String hiredate = scanner.nextLine();
-
-                    p.setJumin(jumin);
-                    p.setName(name);
-                    p.setDepartment(depertment);
-                    p.setGrade(rank);
-                    p.setHiredate(hiredate);
-                    System.out.println("교수 정보가 새로 바꼈습니다.");
-                    return;
-                }
-            }
-            System.out.println("해당 ID의 교수가 없습니다.");
-        } // end of professorModify
-
-        private static void professorDelete(Scanner scanner){
-            System.out.println("삭제할 교수ID를 입력하세요");
-            String id = scanner.nextLine();
-            for(int i = 0; i < repo.getProfessors().size(); i++) {
-                if(repo.getProfessors().get(i).getId().equals(id)) {
-                    repo.getProfessors().remove(i);
-                    System.out.println("교수 정보가 삭제되었습니다.");
-                    return;
-                }
-            }
-            System.out.println("해당 교수ID가 없습니다.");
-        } // end of professorDelete
-
-        private static void ProfessorListByDepartment(Scanner scanner){
-            System.out.println("===============");
-            System.out.println("1. 컴퓨터공학과");
-            System.out.println("2. 산업공학과");
-            System.out.println("3. 전자공학과");
-            System.out.println("===============");
-            System.out.println("학과를 선택해주세요");
+    private static void professorMenu() { // 교수 관리 메뉴
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("==================");
+            System.out.println("1. 교수 등록");
+            System.out.println("2. 교수 조회");
+            System.out.println("3. 교수 정보 수정");
+            System.out.println("4. 교수 정보 삭제");
+            System.out.println("5. 학과별 교수 목록");
+            System.out.println("6. 직급별 교수 목록");
+            System.out.println("7. 메인 메뉴로 가기");
+            System.out.println("메뉴 선택");
             int choice = scanner.nextInt();
             scanner.nextLine(); // 버퍼 지우기
 
-            switch (choice){
+            switch (choice) {
                 case 1:
-                    for(Professor p : repo.getProfessors()) {
-                        if(p.getDepartment() == 920) {
-                            System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
-                                    + " " + p.getGrade() + " " + p.getHireDate());
-                        }
-                    }
+                    professorRegistration(scanner); // 교수 등록
                     break;
                 case 2:
-                    for(Professor p : repo.getProfessors()){
-                        if(p.getDepartment() == 923){
-                            System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
-                                    + " " + p.getGrade() + " " + p.getHireDate());
-                        }
-                    }
+                    professorCheck(); // 교수 조회
                     break;
                 case 3:
-                    for(Professor p : repo.getProfessors()){
-                        if(p.getDepartment() == 925){
-                            System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
-                                    + " " + p.getGrade() + " " + p.getHireDate());
-                        }
-                    }
+                    professorModify(scanner); // 교수 정보 수정
                     break;
+                case 4:
+                    professorDelete(scanner); // 교수 정보 삭제
+                    break;
+                case 5:
+                    ProfessorListByDepartment(scanner); // 학과별 교수 목록
+                    break;
+                case 6:
+                    ListofProfessorsByRank(scanner); // 직급별 교수 목록
+                    break;
+                case 7:
+                    return; // 메뉴로 돌아가기
                 default:
                     System.out.println("잘못된 입력입니다. 다시 선택해주세요");
             }
-        }// end of ProfessorListByDepartment
+        }
+    }
 
-        private static void ListofProfessorsByRank(Scanner scanner) {
-            System.out.println("==============");
-            System.out.println("1. 교수");
-            System.out.println("2. 부교수");
-            System.out.println("3. 조교수");
-            System.out.println("==============");
-            System.out.println("직급을 선택하세요");
-            int choice = scanner.nextInt();
+    private  static void professorRegistration(Scanner scanner) {
+        System.out.print("교수ID: ");
+        String id = scanner.nextLine();
+        System.out.print("주민번호: ");
+        String jumin = scanner.nextLine();
+        System.out.print("이름: ");
+        String name = scanner.nextLine();
+        System.out.print("학과코드: ");
+        int department = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("직급: ");
+        String rank = scanner.nextLine();
+        System.out.print("고용시기: ");
+        String hiredate = scanner.nextLine();
 
-            switch (choice){
-                case 1:
-                    for(Professor p : repo.getProfessors()){
-                        if(p.getGrade().equals("교수")){
-                            System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
-                                    + " " + p.getGrade() + " " + p.getHireDate());
-                        }
+        Professor professor = new Professor(id, jumin, name, department, rank,hiredate);
+        repo.getProfessors().add(professor);
+        System.out.println("새로운 교수가 등록되었습니다.");
+    } // end of professorRegistration
+
+    private static void professorCheck() {
+        System.out.println("등록된 교수 목록");
+        for(Professor p : repo.getProfessors()){
+            System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
+                    + " " + p.getGrade() + " " + p.getHireDate());
+        }
+    } //end of professorCheck
+
+    private  static void professorModify(Scanner scanner) {
+        System.out.println("수정할 교수의 ID를 입력하세요");
+        String id = scanner.nextLine();
+        for(Professor p : repo.getProfessors()){
+            if(p.getId().equals(id)){
+                System.out.print("새 주민번호: ");
+                String jumin = scanner.nextLine();
+                System.out.print("새 이름: ");
+                String name = scanner.nextLine();
+                System.out.print("새 학과코드: ");
+                int depertment = scanner.nextInt();
+                scanner.nextLine();
+                System.out.print("새 직급: ");
+                String rank = scanner.nextLine();
+                System.out.print("새 고용시기: ");
+                String hiredate = scanner.nextLine();
+
+                p.setJumin(jumin);
+                p.setName(name);
+                p.setDepartment(depertment);
+                p.setGrade(rank);
+                p.setHiredate(hiredate);
+                System.out.println("교수 정보가 새로 바꼈습니다.");
+                return;
+            }
+        }
+        System.out.println("해당 ID의 교수가 없습니다.");
+    } // end of professorModify
+
+    private static void professorDelete(Scanner scanner){
+        System.out.println("삭제할 교수ID를 입력하세요");
+        String id = scanner.nextLine();
+        for(int i = 0; i < repo.getProfessors().size(); i++) {
+            if(repo.getProfessors().get(i).getId().equals(id)) {
+                repo.getProfessors().remove(i);
+                System.out.println("교수 정보가 삭제되었습니다.");
+                return;
+            }
+        }
+        System.out.println("해당 교수ID가 없습니다.");
+    } // end of professorDelete
+
+    private static void ProfessorListByDepartment(Scanner scanner){
+        System.out.println("===============");
+        System.out.println("1. 컴퓨터공학과");
+        System.out.println("2. 산업공학과");
+        System.out.println("3. 전자공학과");
+        System.out.println("===============");
+        System.out.println("학과를 선택해주세요");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // 버퍼 지우기
+
+        switch (choice){
+            case 1:
+                for(Professor p : repo.getProfessors()) {
+                    if(p.getDepartment() == 920) {
+                        System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
+                                + " " + p.getGrade() + " " + p.getHireDate());
                     }
+                }
+                break;
+            case 2:
+                for(Professor p : repo.getProfessors()){
+                    if(p.getDepartment() == 923){
+                        System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
+                                + " " + p.getGrade() + " " + p.getHireDate());
+                    }
+                }
+                break;
+            case 3:
+                for(Professor p : repo.getProfessors()){
+                    if(p.getDepartment() == 925){
+                        System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
+                                + " " + p.getGrade() + " " + p.getHireDate());
+                    }
+                }
+                break;
+            default:
+                System.out.println("잘못된 입력입니다. 다시 선택해주세요");
+        }
+    }// end of ProfessorListByDepartment
+
+    private static void ListofProfessorsByRank(Scanner scanner) {
+        System.out.println("==============");
+        System.out.println("1. 교수");
+        System.out.println("2. 부교수");
+        System.out.println("3. 조교수");
+        System.out.println("==============");
+        System.out.println("직급을 선택하세요");
+        int choice = scanner.nextInt();
+
+        switch (choice){
+            case 1:
+                for(Professor p : repo.getProfessors()){
+                    if(p.getGrade().equals("교수")){
+                        System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
+                                + " " + p.getGrade() + " " + p.getHireDate());
+                    }
+                }
+                break;
+            case 2:
+                for(Professor p : repo.getProfessors()){
+                    if(p.getGrade().equals("부교수")){
+                        System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
+                                + " " + p.getGrade() + " " + p.getHireDate());
+                    }
+                }
+                break;
+            case 3:
+                for(Professor p : repo.getProfessors()){
+                    if(p.getGrade().equals("조교수")){
+                        System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
+                                + " " + p.getGrade() + " " + p.getHireDate());
+                    }
+                }
+                break;
+            default:
+                System.out.println("잘못된 직급을 선택했습니다.");
+        }
+    } // end of ListofProfessorsByRank
+
+    private static void gradesMenu () { // 성적 관리 메뉴
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("=============================");
+            System.out.println("1. 성적 등록");
+            System.out.println("2. 성적 조회");
+            System.out.println("3. 메인 메뉴로 가기");
+            System.out.println("=============================");
+            System.out.print("메뉴 선택 : ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // 버퍼 비우기
+
+            switch (choice) {
+                case 1:
+
+                    registerGrade(scanner);
                     break;
                 case 2:
-                    for(Professor p : repo.getProfessors()){
-                        if(p.getGrade().equals("부교수")){
-                            System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
-                                    + " " + p.getGrade() + " " + p.getHireDate());
-                        }
-                    }
+                    displayGradesByStudentId(scanner);
                     break;
                 case 3:
-                    for(Professor p : repo.getProfessors()){
-                        if(p.getGrade().equals("조교수")){
-                            System.out.println(p.getId() + " " + p.getJumin() + " " + p.getName() + " " + p.getDepartment()
-                                    + " " + p.getGrade() + " " + p.getHireDate());
-                        }
-                    }
-                    break;
+                    return;
                 default:
-                    System.out.println("잘못된 직급을 선택했습니다.");
+                    System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
             }
-        } // end of ListofProfessorsByRank
+        }
+    }
+
 
     // 성적 등록
     private static void registerGrade (Scanner scanner){
